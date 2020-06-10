@@ -5,7 +5,7 @@ setup(
     packages=find_packages(),
     scripts=["merge-keepass.py"],
 
-    install_requires=["libkeepass>=0.3"],
+    install_requires=["libkeepass"],
 
     # metadata to display on PyPI
     author="Scott Hamilton",
