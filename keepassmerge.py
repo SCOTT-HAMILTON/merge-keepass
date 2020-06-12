@@ -18,7 +18,7 @@ def merge_two_databases(file_database1,
             found = {}
 
             kdbm = kdb.merge(kdb_other, metadata=True, debug=(verbose>0),
-                             mode=libkeepass.utils.merge.KDB4Merge.MM_SYNCHRONIZE_3WAY)
+                             mode=libkeepass.utils.merge.KDB4Merge.MM_OVERWRITE_IF_NEWER)
             with open(file_output_database, 'wb') as output:
                 kdb.write_to(output)
 
