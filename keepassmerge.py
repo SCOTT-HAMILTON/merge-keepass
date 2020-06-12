@@ -40,7 +40,6 @@ def merge_databases(file_input_databases,
                     file_output_database,
                     master_password,
                     verbose=0):
-    assert len(file_input_databases) >=2
     previous_file_db = file_input_databases[0]
     for file_db in itertools.islice(file_input_databases, 1, None):
         merge_two_databases(previous_file_db,
