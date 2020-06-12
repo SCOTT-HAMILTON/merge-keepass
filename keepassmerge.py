@@ -17,10 +17,8 @@ def merge_two_databases(file_database1,
              libkeepass.open(file_database2, password=master_password) as kdb_other:
             found = {}
 
-            # MM_SYNCHRONIZE is the default, but we explicitly pass it here as an
-            # example of how to set the desired mode.
             kdbm = kdb.merge(kdb_other, metadata=True, debug=(verbose>0),
-                             mode=libkeepass.utils.merge.KDB4Merge.MM_SYNCHRONIZE)
+                             mode=libkeepass.utils.merge.KDB4Merge.MM_SYNCHRONIZE_3WAY)
             with open(file_output_database, 'wb') as output:
                 kdb.write_to(output)
 
