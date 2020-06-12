@@ -5,6 +5,7 @@ import sys
 import libkeepass
 import libkeepass.utils.merge
 import itertools
+from shutil import copyfile
 
 def merge_two_databases(file_database1,
                    file_database2,
@@ -40,6 +41,9 @@ def merge_databases(file_input_databases,
                     file_output_database,
                     master_password,
                     verbose=0):
+    if len(file_input_databases) == 1:
+        copyfile(file_input_databases[0],file_output_database)
+        return
     previous_file_db = file_input_databases[0]
     for file_db in itertools.islice(file_input_databases, 1, None):
         merge_two_databases(previous_file_db,
