@@ -1,4 +1,6 @@
 from pykeepass import PyKeePass
+from pykeepass.exceptions import CredentialsIntegrityError
+from click import echo
 from datetime import datetime
 from dateutil import tz
 import itertools
@@ -7,20 +9,25 @@ addedAndModifiedEntries = []
 
 class NoGroupException(Exception):
     pass
-
 class NoEntryException(Exception):
+    pass
+class DB1WrongPasswordError(Exception):
+    pass
+class DB2WrongPasswordError(Exception):
+    pass
+class WrongPasswordError(Exception):
     pass
 
 def copy_group(group1, group2, debug=False):
     if group1.name:
-        group2.username=group1.username
+        group2.name=group1.name
     if group1.icon:
         group2.icon=group1.icon
     if group1.notes:
         group2.notes=group1.notes
-    group2.touch(modify=True)
+    group2.mtime = group1.mtime
     if debug:
-        print("Updated group ",group2)
+        echo("Updated group ",group2)
 
 def add_group(group, db, debug=False):
     parentgroup = db.find_groups(path=group.parentgroup.path)
@@ -36,10 +43,10 @@ def add_group(group, db, debug=False):
         args['icon'] = group.icon
     if group.notes:
         args['notes'] = group.notes
-    print(args)
+    echo(args)
     new_group = db.add_group(**args)
     if debug:
-        print("Added group ",args)
+        echo("Added group ",args)
 
 def sync_groups(db1, db2, debug=False):
     for group in db1.groups:
@@ -95,9 +102,9 @@ def add_entry(entry, db, debug=False):
 
     new_entry = db.add_entry(**args)
     if debug:
-        print("Added entry",args)
+        echo("Added entry",args)
     addedAndModifiedEntries.append(parentgroup.path+new_entry.title)
-    print(addedAndModifiedEntries)
+    echo(addedAndModifiedEntries)
 
 def sync_entries(db1, db2, debug=False):
     for entry in db1.entries:
@@ -110,13 +117,13 @@ def sync_entries(db1, db2, debug=False):
             if entry.mtime > other_entry.mtime:
                 addedAndModifiedEntries.append(entry.title)
                 if debug:
-                    print("Updated entry : ", other_entry)
+                    echo("Updated entry : ", other_entry)
                 other_entry.save_history()
                 copy_entry(other_entry, entry)
             elif entry.mtime < other_entry.mtime:
                 addedAndModifiedEntries.append(entry.title)
                 if debug:
-                    print("Updated entry : ", entry)
+                    echo("Updated entry : ", entry)
                 entry.save_history()
                 copy_entry(entry, other_entry)
 
@@ -133,15 +140,22 @@ def sync_custom_properties(db1, db2, debug=False):
             if not other_property:
                 new_property = other_entry.set_custom_property(property_key,property_value)
                 if debug:
-                    print('Added property : {',property_key,' : `'+property_value+'`}')
+                    echo('Added property : {',property_key,' : `'+property_value+'`}')
 
 def merge_two_databases(file_database1,
                    file_database2,
                    file_output_database,
                    master_password,
                    debug=False):
-    kp1 = PyKeePass(file_database1, password=master_password)
-    kp2 = PyKeePass(file_database2, password=master_password)
+    try:
+        kp1 = PyKeePass(file_database1, password=master_password)
+    except CredentialsIntegrityError:
+        raise DB1WrongPasswordError
+    try:
+        kp2 = PyKeePass(file_database2, password=master_password)
+    except CredentialsIntegrityError:
+        raise DB2WrongPasswordError
+
     sync_groups(kp2,kp1, debug=debug)
     sync_entries(kp2,kp1, debug=debug)
     sync_custom_properties(kp2,kp1, debug=debug)
@@ -152,15 +166,32 @@ def merge_two_databases(file_database1,
 def merge_databases(file_input_databases,
                     file_output_database,
                     master_password,
+                    continue_on_error=False,
                     debug=False):
     if len(file_input_databases) == 1:
         copyfile(file_input_databases[0],file_output_database)
         return
     previous_file_db = file_input_databases[0]
+    got_errors = False
     for file_db in itertools.islice(file_input_databases, 1, None):
-        merge_two_databases(previous_file_db,
+        try:
+            merge_two_databases(previous_file_db,
                             file_db,
                             file_output_database,
                             master_password,
                             debug)
+        except DB1WrongPasswordError:
+            got_errors = True
+            if continue_on_error:
+                previous_file_db = file_db
+                continue
+            raise WrongPasswordError
+        except DB2WrongPasswordError:
+            got_errors = True
+            if continue_on_error:
+                continue
+            raise WrongPasswordError
         previous_file_db = file_output_database
+    if continue_on_error:
+        return got_errors
+
