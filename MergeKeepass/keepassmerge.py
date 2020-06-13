@@ -1,5 +1,3 @@
-#! /usr/bin/env python3
-
 from pykeepass import PyKeePass
 from datetime import datetime
 from dateutil import tz

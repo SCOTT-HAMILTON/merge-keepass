@@ -1,8 +1,6 @@
-#! /usr/bin/env python3
-
 import getpass
 import click
-from keepassmerge import merge_databases
+from MergeKeepass.keepassmerge import merge_databases
 from getpass import getpass
 
 @click.command()
@@ -10,7 +8,7 @@ from getpass import getpass
 @click.option('-d', '--debug', is_flag=True)
 @click.argument('input_databases', type=click.Path(exists=True), nargs=-1)
 @click.argument('output_database', type=click.Path())
-def merge(input_databases,
+def cli(input_databases,
                 output_database,
                 password,
                 debug):

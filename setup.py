@@ -1,15 +1,17 @@
 from setuptools import setup, find_packages
+
 setup(
-    name='merge-keepass',
+    name='MergeKeepass',
     version='0.1',
-    scripts=[ 'merge-keepass.py' ],
-    py_modules = [ 'keepassmerge' ],
+    packages=find_packages(),
+    include_package_data=True,
+    py_modules = [ 'merge_keepass' 'keepassmerge' ],
 
     install_requires=['pykeepass', 'Click'],
 
     entry_points='''
         [console_scripts]
-        merge-keepass=merge-keepass:merge
+        merge_keepass=MergeKeepass.merge_keepass:cli
     ''',
 
     # metadata to display on PyPI
