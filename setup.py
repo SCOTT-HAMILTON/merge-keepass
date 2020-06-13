@@ -2,12 +2,15 @@ from setuptools import setup, find_packages
 setup(
     name='merge-keepass',
     version='0.1',
-    # packages=find_packages(),
-    # package_dir = {'':'src'},
     scripts=[ 'merge-keepass.py' ],
     py_modules = [ 'keepassmerge' ],
 
-    install_requires=["libkeepass"],
+    install_requires=['pykeepass', 'Click'],
+
+    entry_points='''
+        [console_scripts]
+        merge-keepass=merge-keepass:merge
+    ''',
 
     # metadata to display on PyPI
     author='Scott Hamilton',

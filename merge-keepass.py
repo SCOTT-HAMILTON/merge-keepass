@@ -1,27 +1,23 @@
 #! /usr/bin/env python3
 
 import getpass
-import argparse
-from keepassmerge import merge_two_databases
+import click
+from keepassmerge import merge_databases
+from getpass import getpass
 
-parser = argparse.ArgumentParser()
-parser.add_argument('infilenames', nargs=2)
-parser.add_argument('outfilename')
-parser.add_argument('-p', '--password')
-args = parser.parse_args()
-
-filename = args.infilenames[0]
-filename_other = args.infilenames[1]
-filename_output = args.outfilename
-
-if args.password:
-    master_password = args.password
-else:
-    master_password = getpass.getpass()
-
-verbose = 0
-
-merge_two_databases(filename,
-                filename_other,
-                filename_output,
-                master_password)
+@click.command()
+@click.option('-p', '--password', type=click.STRING)
+@click.option('-d', '--debug', is_flag=True)
+@click.argument('input_databases', type=click.Path(exists=True), nargs=-1)
+@click.argument('output_database', type=click.Path())
+def merge(input_databases,
+                output_database,
+                password,
+                debug):
+    assert len(input_databases)
+    if not password:
+        password = getpass()
+    merge_databases(input_databases,
+                    output_database,
+                    password,
+                    debug)
