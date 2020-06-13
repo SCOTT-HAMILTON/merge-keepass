@@ -11,7 +11,7 @@ class NoGroupException(Exception):
 class NoEntryException(Exception):
     pass
 
-def copy_group(group1, group2):
+def copy_group(group1, group2, debug=False):
     if group1.name:
         group2.username=group1.username
     if group1.icon:
@@ -19,6 +19,8 @@ def copy_group(group1, group2):
     if group1.notes:
         group2.notes=group1.notes
     group2.touch(modify=True)
+    if debug:
+        print("Updated group ",group2)
 
 def add_group(group, db, debug=False):
     parentgroup = db.find_groups(path=group.parentgroup.path)
@@ -28,7 +30,6 @@ def add_group(group, db, debug=False):
     if not parentgroup:
         raise NoGroupException
     args = {'destination_group':parentgroup}
-    print(group.path)
     if group.name:
         args['group_name'] = group.name
     if group.icon:
