@@ -1,6 +1,6 @@
 # merge-keepass
 
-Keepass Databases 2.x Merging module and command line utility
+Keepass Databases 1.x/2.x Merging module and command line utility
 
 # Building
 
@@ -43,10 +43,10 @@ output_database = 'out.kdbx'
 password = getpass()
 
 got_errors = merge_databases(input_databases,
-		output_database,
-		password,
-		debug=False,
-		continue_on_error=False)
+			     output_database,
+			     password,
+			     debug=False,
+			     continue_on_error=False)
 
 if got_errors:
 	pass
@@ -72,6 +72,7 @@ password = getpass()
 try:
 	merge_two_databases(database1,
 			    database2,
+			    output_database,
 			    password,
 			    debug=False)
 except  DB1WrongPasswordError:
