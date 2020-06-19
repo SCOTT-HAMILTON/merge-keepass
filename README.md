@@ -2,6 +2,8 @@
 
 Keepass Databases 1.x/2.x Merging module and command line utility
 
+![Travis CI build status](https://travis-ci.org/SCOTT-HAMILTON/merge-keepass.svg?branch=master)
+
 # Building
 
 This project is configured for setuptools
