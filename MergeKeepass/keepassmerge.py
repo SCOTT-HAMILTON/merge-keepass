@@ -1,9 +1,10 @@
-from pykeepass import PyKeePass
-from pykeepass.exceptions import CredentialsIntegrityError
 from click import echo
 from datetime import datetime
 from dateutil import tz
 import itertools
+from pykeepass import PyKeePass
+from pykeepass.exceptions import CredentialsIntegrityError
+from shutil import copyfile
 
 addedAndModifiedEntries = []
 
