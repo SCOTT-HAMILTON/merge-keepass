@@ -3,7 +3,7 @@ from datetime import datetime
 from dateutil import tz
 import itertools
 from pykeepass import PyKeePass
-from pykeepass.exceptions import CredentialsIntegrityError
+from pykeepass.exceptions import CredentialsError
 from shutil import copyfile
 
 addedAndModifiedEntries = []
@@ -150,11 +150,11 @@ def merge_two_databases(file_database1,
                    debug=False):
     try:
         kp1 = PyKeePass(file_database1, password=master_password)
-    except CredentialsIntegrityError:
+    except CredentialsError:
         raise DB1WrongPasswordError
     try:
         kp2 = PyKeePass(file_database2, password=master_password)
-    except CredentialsIntegrityError:
+    except CredentialsError:
         raise DB2WrongPasswordError
 
     sync_groups(kp2,kp1, debug=debug)
