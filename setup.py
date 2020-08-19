@@ -7,7 +7,7 @@ setup(
     include_package_data=True,
     py_modules = [ 'merge_keepass' 'keepassmerge' ],
 
-    install_requires=['pykeepass >= 3.2.1', 'Click'],
+    install_requires=['pykeepass >= 3', 'Click'],
 
     entry_points='''
         [console_scripts]

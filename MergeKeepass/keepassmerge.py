@@ -3,7 +3,15 @@ from datetime import datetime
 from dateutil import tz
 import itertools
 from pykeepass import PyKeePass
-from pykeepass.exceptions import CredentialsError
+
+from pkg_resources import parse_version, get_distribution
+pykeepass_version = get_distribution("pykeepass").version
+
+if parse_version(pykeepass_version) < parse_version("3.2.1"):
+    from pykeepass.exceptions import CredentialsIntegrityError
+    CredentialsError = CredentialsIntegrityError
+else:
+    from pykeepass.exceptions import CredentialsError
 from shutil import copyfile
 
 addedAndModifiedEntries = []

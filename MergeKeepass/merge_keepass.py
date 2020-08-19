@@ -1,5 +1,6 @@
 import getpass
 import click
+import pykeepass
 from MergeKeepass.keepassmerge import merge_databases
 from getpass import getpass
 
@@ -14,6 +15,7 @@ def cli(input_databases,
                 password,
                 debug,
                 continue_on_error):
+    print("pykeepass version : ",pykeepass.__version__)
     assert len(input_databases)
     if not password:
         password = getpass()

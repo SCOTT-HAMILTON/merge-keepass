@@ -1,4 +1,5 @@
 import pytest
+import pykeepass
 
 from MergeKeepass.keepassmerge import merge_databases
 
