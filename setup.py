@@ -11,7 +11,7 @@ setup(
 
     entry_points='''
         [console_scripts]
-        merge_keepass=MergeKeepass.merge_keepass:cli
+        merge_keepass=MergeKeepass.cli:cli
     ''',
 
     # metadata to display on PyPI

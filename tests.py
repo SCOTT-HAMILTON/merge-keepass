@@ -1,8 +1,11 @@
 import pytest
 import pykeepass
 
-from MergeKeepass.keepassmerge import merge_databases
+from MergeKeepass.keepassmerge import KeepassMerger
 
 def test_merge_databases():
-    assert not merge_databases([ 'testing/DB1.kdbx', 'testing/DB2.kdbx' ], 'testing/DB-out.kdbx', 'test')
+    merger = KeepassMerger()
+    assert not merger.merge_databases(
+            [ 'testing/DB1.kdbx', 'testing/DB2.kdbx' ],
+            'testing/DB-out.kdbx', 'test')
 
