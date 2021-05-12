@@ -115,7 +115,8 @@ class KeepassMerger:
         new_entry = db.add_entry(**args)
         if debug:
             echo("Added entry",args)
-        if parse_version(pykeepass_version) < parse_version("4.0.0"):
+        print("Pykeepass Version : ",pykeepass_version)
+        if parse_version(pykeepass_version) < parse_version("3.2.1"):
             self.addedAndModifiedEntries.append(parentgroup.path+new_entry.title)
         else:
             string_path = '/'.join(parentgroup.path)
