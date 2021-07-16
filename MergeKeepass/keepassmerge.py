@@ -20,6 +20,8 @@ class NoGroupException(Exception):
     pass
 class NoEntryException(Exception):
     pass
+class NoTitleException(Exception):
+    pass
 class DB1WrongPasswordError(Exception):
     pass
 class DB2WrongPasswordError(Exception):
@@ -95,12 +97,12 @@ class KeepassMerger:
         if not parentgroup:
             raise NoGroupException
         args = {'destination_group':parentgroup}
-        if entry.title:
+        if not entry.title:
+            raise NoTitleException
+        else:
             args['title'] = entry.title
-        if entry.username:
-            args['username'] = entry.username
-        if entry.password:
-            args['password'] = entry.password
+        args['username'] = entry.username or ""
+        args['password'] = entry.password or ""
         if entry.url:
             args['url'] = entry.url
         if entry.notes:
@@ -111,7 +113,6 @@ class KeepassMerger:
             args['tags'] = entry.tags
         if entry.icon:
             args['icon'] = entry.icon
-
         new_entry = db.add_entry(**args)
         if debug:
             echo("Added entry",args)
