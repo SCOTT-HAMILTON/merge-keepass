@@ -109,7 +109,6 @@ class KeepassMerger:
         parentgroup = db.find_groups(path=entry.parentgroup.path)
         if not parentgroup:
             raise NoGroupException
-        args = {"destination_group": parentgroup}
         parentgroup._element.append(entry._element)
         if debug:
             echo("Added entry", args)
