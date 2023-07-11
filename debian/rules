@@ -1,0 +1,20 @@
+#!/usr/bin/make -f
+# See debhelper(7) (uncomment to enable)
+# output every command that modifies files on the build system.
+#DH_VERBOSE = 1
+
+#! /usr/bin/make -f
+
+#export DH_VERBOSE = 1
+export PYBUILD_NAME = merge-keepass
+
+%:
+	dh $@ --with python3 --buildsystem=pybuild
+
+override_dh_auto_test:
+	export PYTHONDONTWRITEBYTECODE=1
+
+clean:
+	dh_clean
+	rm -rf MergeKeepass.egg-info
+	# rm -f debian/merge-keepass.substvars

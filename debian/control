@@ -1,0 +1,18 @@
+Source: python3-merge-keepass
+Maintainer: Scott Hamilton <sgn.hamilton+obs@protonmail.com>
+Section: utils
+Priority: optional
+Build-Depends: dh-python,
+               python3-all,
+               python3-setuptools,
+               debhelper-compat (= 12)
+Standards-Version: 4.5.0
+
+Package: python3-merge-keepass
+Architecture: all
+Depends: ${python3:Depends},
+         ${misc:Depends}
+Description: Keepass Databases 2.x Merging script
+ merge-keepass is a python module that updates/adds new groups,
+ new entries and new fields to keepass databases. Unfortunatly,
+ due to a bug in pykeepass, it cannot merge attachments.
